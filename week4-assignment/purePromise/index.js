@@ -21,3 +21,5 @@ function testMyPromise() {
 }
 
 testMyPromise().then((value) => console.log(value));
+
+export default MyPromise;
