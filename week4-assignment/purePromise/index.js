@@ -2,9 +2,21 @@ class MyPromise {
   #value = null;
 
   constructor(executor) {
-    executor((value) => {
-      this.#value = value;
-    });
+    this.#value = null;
+
+    try {
+      executor(this.#resolve.bind(this), this.#reject.bind(this));
+    } catch (error) {
+      this.#reject(error);
+    }
+  }
+
+  #resolve(value) {
+    this.#value = value;
+  }
+
+  #reject(error) {
+    this.#value = error;
   }
 
   then(callback) {
@@ -12,14 +24,25 @@ class MyPromise {
 
     return this;
   }
+
+  catch(callback) {
+    callback(this.#value);
+
+    return this;
+  }
 }
 
-function testMyPromise() {
-  return new MyPromise((resolve) => {
-    resolve('my resolve');
+function testMyPromise(input) {
+  return new MyPromise((resolve, reject) => {
+    if (input === 1) {
+      resolve('정상적입니다');
+    }
+    reject('입력값이 1이 아닙니다');
   });
 }
 
-testMyPromise().then((value) => console.log(value));
+testMyPromise(1)
+  .then((value) => console.log(value))
+  .catch((error) => console.log(error));
 
 export default MyPromise;
