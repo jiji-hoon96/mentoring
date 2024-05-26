@@ -84,3 +84,24 @@ class MyPromise {
     return this.then(undefined, catchCallback);
   }
 }
+
+function myPromiseFn2(input) {
+  return new MyPromise((resolve, reject) => {
+    if (input === 1) {
+      resolve('성공');
+    } else {
+      reject('실패');
+    }
+  });
+}
+
+myPromiseFn2(2)
+  .then((v) => {
+    console.log(v);
+    return v;
+  })
+  .catch((v) => {
+    console.log(v);
+    return '오류 발생!!!';
+  })
+  .then((v) => console.log(v));
