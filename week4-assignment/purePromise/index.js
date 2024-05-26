@@ -10,7 +10,9 @@ class MyPromise {
 
   #value = null;
 
-  #lastCallbacks = [];
+  #catchCallbacks = [];
+
+  #thenCallbacks = [];
 
   constructor(executor) {
     try {
@@ -20,11 +22,23 @@ class MyPromise {
     }
   }
 
+  #runCallbacks() {
+    if (this.#state === PROMISES_STATE.fulfilled) {
+      this.#thenCallbacks.forEach((callback) => callback(this.#value));
+      this.#thenCallbacks = [];
+    }
+
+    if (this.#state === PROMISES_STATE.rejected) {
+      this.#catchCallbacks.forEach((callback) => callback(this.#value));
+      this.#catchCallbacks = [];
+    }
+  }
+
   #update(state, value) {
     queueMicrotask(() => {
       this.#state = state;
       this.#value = value;
-      this.#lastCallbacks.forEach((lastCallback) => lastCallback());
+      this.#runCallbacks();
     });
   }
 
@@ -36,50 +50,37 @@ class MyPromise {
     this.#update(PROMISES_STATE.rejected, error);
   }
 
-  #asyncResolve(callback) {
-    if (this.#state === PROMISES_STATE.pending) {
-      return new MyPromise((resolve) =>
-        this.#lastCallbacks.push(() => resolve(callback(this.#value)))
-      );
-    }
+  then(thenCallback, catchCallback) {
+    return new MyPromise((resolve, reject) => {
+      this.#thenCallbacks.push((value) => {
+        if (!thenCallback) {
+          resolve(value);
+          return;
+        }
 
-    return null;
+        try {
+          resolve(thenCallback(value));
+        } catch (error) {
+          reject(error);
+        }
+      });
+
+      this.#catchCallbacks.push((value) => {
+        if (!catchCallback) {
+          reject(value);
+          return;
+        }
+
+        try {
+          resolve(catchCallback(value));
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
   }
 
-  #syncResolve(callback) {
-    if (this.#state === PROMISES_STATE.fulfilled) {
-      return new MyPromise((resolve) => resolve(callback(this.#value)));
-    }
-
-    return null;
-  }
-
-  then(callback) {
-    return this.#asyncResolve(callback) || this.#syncResolve(callback);
-  }
-
-  catch(callback) {
-    if (this.state === PROMISES_STATE.rejected) {
-      callback(this.#value);
-    }
-
-    return this;
+  catch(catchCallback) {
+    return this.then(undefined, catchCallback);
   }
 }
-
-function myPromiseFn2() {
-  return new MyPromise((resolve, reject) => {
-    resolve('Promise 실행');
-  });
-}
-
-const test = () => {
-  console.log('첫 번째 콜스택 실행');
-  setTimeout(() => console.log('태스크 큐 실행'), 0);
-
-  myPromiseFn2().then((result) => console.log(result));
-
-  console.log('두 번째 콜스택 실행');
-};
-
-test();
