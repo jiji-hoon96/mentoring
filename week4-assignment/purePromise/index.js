@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const PROMISES_STATE = Object.freeze({
   pending: 'PENDING',
   fulfilled: 'fulfilled',
@@ -28,10 +29,8 @@ class MyPromise {
 
   then(callback) {
     if (this.#state === PROMISES_STATE.fulfilled) {
-      callback(this.#value);
+      return new MyPromise((resolve) => resolve(callback(this.#value)));
     }
-
-    return this;
   }
 
   catch(callback) {
