@@ -4,10 +4,13 @@ const PROMISES_STATE = Object.freeze({
   fulfilled: 'fulfilled',
   rejected: 'rejected',
 });
+
 class MyPromise {
+  #state = PROMISES_STATE.pending;
+
   #value = null;
 
-  #state = PROMISES_STATE.PENDING;
+  #lastcalls = [];
 
   constructor(executor) {
     try {
@@ -17,24 +20,46 @@ class MyPromise {
     }
   }
 
+  #update(state, value) {
+    queueMicrotask(() => {
+      this.#state = state;
+      this.#value = value;
+      this.#lastcalls.forEach((lastcall) => lastcall());
+    });
+  }
+
   #resolve(value) {
-    this.#state = PROMISES_STATE.fulfilled;
-    this.#value = value;
+    this.#update(PROMISES_STATE.fulfilled, value);
   }
 
   #reject(error) {
-    this.#state = PROMISES_STATE.rejected;
-    this.#value = error;
+    this.#update(PROMISES_STATE.rejected, error);
   }
 
-  then(callback) {
+  #asyncResolve(callback) {
+    if (this.#state === PROMISES_STATE.pending) {
+      return new MyPromise((resolve) =>
+        this.#lastcalls.push(() => resolve(callback(this.#value)))
+      );
+    }
+
+    return null;
+  }
+
+  #syncResolve(callback) {
     if (this.#state === PROMISES_STATE.fulfilled) {
       return new MyPromise((resolve) => resolve(callback(this.#value)));
     }
+
+    return null;
+  }
+
+  then(callback) {
+    return this.#asyncResolve(callback) || this.#syncResolve(callback);
   }
 
   catch(callback) {
-    if (this.#state === PROMISES_STATE.rejected) {
+    if (this.state === PROMISES_STATE.rejected) {
       callback(this.#value);
     }
 
@@ -42,20 +67,19 @@ class MyPromise {
   }
 }
 
-function myPromiseFn2(input) {
+function myPromiseFn2() {
   return new MyPromise((resolve, reject) => {
-    if (input === 1) {
-      resolve('성공');
-    } else {
-      reject('실패');
-    }
+    resolve('Promise 실행');
   });
 }
 
-myPromiseFn2(1)
-  .then((v) => {
-    console.log(v);
-    return '체이닝 확인??';
-  })
-  .then((v) => console.log(v))
-  .catch((v) => console.log(v));
+const test = () => {
+  console.log('첫 번째 콜스택 실행');
+  setTimeout(() => console.log('태스크 큐 실행'), 0);
+
+  myPromiseFn2().then((result) => console.log(result));
+
+  console.log('두 번째 콜스택 실행');
+};
+
+test();
