@@ -10,7 +10,7 @@ class MyPromise {
 
   #value = null;
 
-  #lastcalls = [];
+  #lastCallbacks = [];
 
   constructor(executor) {
     try {
@@ -24,7 +24,7 @@ class MyPromise {
     queueMicrotask(() => {
       this.#state = state;
       this.#value = value;
-      this.#lastcalls.forEach((lastcall) => lastcall());
+      this.#lastCallbacks.forEach((lastCallback) => lastCallback());
     });
   }
 
@@ -39,7 +39,7 @@ class MyPromise {
   #asyncResolve(callback) {
     if (this.#state === PROMISES_STATE.pending) {
       return new MyPromise((resolve) =>
-        this.#lastcalls.push(() => resolve(callback(this.#value)))
+        this.#lastCallbacks.push(() => resolve(callback(this.#value)))
       );
     }
 
