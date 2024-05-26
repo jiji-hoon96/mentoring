@@ -1,9 +1,14 @@
+const PROMISES_STATE = Object.freeze({
+  pending: 'PENDING',
+  fulfilled: 'fulfilled',
+  rejected: 'rejected',
+});
 class MyPromise {
   #value = null;
 
-  constructor(executor) {
-    this.#value = null;
+  #state = PROMISES_STATE.PENDING;
 
+  constructor(executor) {
     try {
       executor(this.#resolve.bind(this), this.#reject.bind(this));
     } catch (error) {
@@ -12,37 +17,46 @@ class MyPromise {
   }
 
   #resolve(value) {
+    this.#state = PROMISES_STATE.fulfilled;
     this.#value = value;
   }
 
   #reject(error) {
+    this.#state = PROMISES_STATE.rejected;
     this.#value = error;
   }
 
   then(callback) {
-    callback(this.#value);
+    if (this.#state === PROMISES_STATE.fulfilled) {
+      callback(this.#value);
+    }
 
     return this;
   }
 
   catch(callback) {
-    callback(this.#value);
+    if (this.#state === PROMISES_STATE.rejected) {
+      callback(this.#value);
+    }
 
     return this;
   }
 }
 
-function testMyPromise(input) {
+function myPromiseFn2(input) {
   return new MyPromise((resolve, reject) => {
     if (input === 1) {
-      resolve('정상적입니다');
+      resolve('성공');
+    } else {
+      reject('실패');
     }
-    reject('입력값이 1이 아닙니다');
   });
 }
 
-testMyPromise(1)
-  .then((value) => console.log(value))
-  .catch((error) => console.log(error));
-
-export default MyPromise;
+myPromiseFn2(1)
+  .then((v) => {
+    console.log(v);
+    return '체이닝 확인??';
+  })
+  .then((v) => console.log(v))
+  .catch((v) => console.log(v));
