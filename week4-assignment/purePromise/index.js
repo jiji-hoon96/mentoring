@@ -36,6 +36,11 @@ class MyPromise {
 
   #update(state, value) {
     queueMicrotask(() => {
+      if (this.#state !== PROMISES_STATE.pending) return;
+      if (value instanceof MyPromise) {
+        value.then(this.#resolve.bind(this), this.#reject.bind(this));
+        return;
+      }
       this.#state = state;
       this.#value = value;
       this.#runCallbacks();
@@ -98,24 +103,19 @@ class MyPromise {
   }
 }
 
-function myPromiseFn2(input) {
-  return new MyPromise((resolve, reject) => {
-    if (input === 1) {
-      resolve('성공');
-    } else {
-      reject('실패');
-    }
+new MyPromise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('첫번째 프라미스');
+  }, 1000);
+})
+  .then((res) => {
+    console.log(res);
+    return new MyPromise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('두번째 프라미스');
+      }, 1000);
+    });
+  })
+  .then((res) => {
+    console.log(res);
   });
-}
-
-myPromiseFn2(2)
-  .then((v) => {
-    console.log(v);
-    return v;
-  })
-  .catch((v) => {
-    console.log(v);
-    return '오류 발생!!!';
-  })
-  .then((v) => console.log(v))
-  .finally(() => console.log('Promise가 settled 상태가 되었습니다'));
