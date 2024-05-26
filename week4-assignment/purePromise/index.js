@@ -83,6 +83,19 @@ class MyPromise {
   catch(catchCallback) {
     return this.then(undefined, catchCallback);
   }
+
+  finally(callback) {
+    return this.then(
+      (value) => {
+        callback();
+        return value;
+      },
+      (value) => {
+        callback();
+        throw value;
+      }
+    );
+  }
 }
 
 function myPromiseFn2(input) {
@@ -104,4 +117,5 @@ myPromiseFn2(2)
     console.log(v);
     return '오류 발생!!!';
   })
-  .then((v) => console.log(v));
+  .then((v) => console.log(v))
+  .finally(() => console.log('Promise가 settled 상태가 되었습니다'));
