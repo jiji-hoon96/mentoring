@@ -21,7 +21,7 @@ const React = (function () {
 
 function Component() {
   const [count, setCount] = React.useState(1);
-  const [humanName, setHumanName] = React.useState("default");
+  const [humanName, setHumanName] = React.useState('default');
   return {
     render: () => console.log(count, humanName),
     click: () => setCount(count + 1),
@@ -31,5 +31,6 @@ function Component() {
 
 var App = React.render(Component);
 App.click();
-App.changeName("jihoon");
-var App = React.render(Component);
+App.changeName('jihoon');
+React.render(Component);
+React.render(Component);
