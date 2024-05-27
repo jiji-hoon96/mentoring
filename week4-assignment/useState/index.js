@@ -19,18 +19,18 @@ const React = (function () {
   return { useState, render };
 })();
 
-function Component() {
-  const [count, setCount] = React.useState(1);
-  const [humanName, setHumanName] = React.useState('default');
-  return {
-    render: () => console.log(count, humanName),
-    click: () => setCount(count + 1),
-    changeName: (name) => setHumanName(name),
-  };
-}
+// function Component() {
+//   const [count, setCount] = React.useState(1);
+//   const [humanName, setHumanName] = React.useState('default');
+//   return {
+//     render: () => console.log(count, humanName),
+//     click: () => setCount(count + 1),
+//     changeName: (name) => setHumanName(name),
+//   };
+// }
 
-var App = React.render(Component);
-App.click();
-App.changeName('jihoon');
-React.render(Component);
-React.render(Component);
+// var App = React.render(Component);
+// App.click();
+// App.changeName('jihoon');
+// React.render(Component);
+// React.render(Component);
