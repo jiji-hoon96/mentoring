@@ -12,6 +12,7 @@
   },
   "ignorePatterns": ["__tests__/"],
   "rules": {
+    "no-throw-literal": "off",
     "import/prefer-default-export": "off",
     "import/extensions": ["off"],
     "max-depth": ["error", 2],
