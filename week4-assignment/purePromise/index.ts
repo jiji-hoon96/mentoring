@@ -1,19 +1,15 @@
-const PROMISES_STATE = Object.freeze({
-  pending: 'PENDING',
-  fulfilled: 'fulfilled',
-  rejected: 'rejected',
-});
+import PROMISES_STATE from './utils/state';
 
 type Executor<T> = (
   resolve: (value: T | MyPromise<T>) => void,
-  reject: (reason?: any) => void
+  reject: (reason?: unknown) => void
 ) => void;
 
-class MyPromise<T = any> {
+class MyPromise<T = unknown> {
   #state: string = PROMISES_STATE.pending;
   #value: T | null = null;
 
-  #catchCallbacks: ((reason?: any) => void)[] = [];
+  #catchCallbacks: ((reason?: unknown) => void)[] = [];
   #thenCallbacks: ((value: T) => void)[] = [];
 
   constructor(executor: Executor<T>) {
@@ -36,7 +32,7 @@ class MyPromise<T = any> {
     }
   }
 
-  #update(state: string, value: T | MyPromise<T> | any): void {
+  #update(state: string, value: T | MyPromise<T> | unknown): void {
     queueMicrotask(() => {
       if (this.#state !== PROMISES_STATE.pending) return;
       if (value instanceof MyPromise) {
@@ -44,7 +40,7 @@ class MyPromise<T = any> {
         return;
       }
       this.#state = state;
-      this.#value = value;
+      this.#value = value as T;
       this.#runCallbacks();
     });
   }
@@ -53,13 +49,13 @@ class MyPromise<T = any> {
     this.#update(PROMISES_STATE.fulfilled, value);
   }
 
-  #reject(error: any): void {
+  #reject(error: unknown): void {
     this.#update(PROMISES_STATE.rejected, error);
   }
 
   then<TResult = T>(
     thenCallback?: (value: T) => TResult | MyPromise<TResult>,
-    catchCallback?: (reason?: any) => TResult | MyPromise<TResult>
+    catchCallback?: (reason?: unknown) => TResult | MyPromise<TResult>
   ): MyPromise<TResult> {
     return new MyPromise<TResult>((resolve, reject) => {
       this.#thenCallbacks.push((value: T) => {
@@ -91,7 +87,7 @@ class MyPromise<T = any> {
   }
 
   catch<TResult = T>(
-    catchCallback?: (reason?: any) => TResult | MyPromise<TResult>
+    catchCallback?: (reason?: unknown) => TResult | MyPromise<TResult>
   ): MyPromise<TResult> {
     return this.then(undefined, catchCallback);
   }
@@ -109,3 +105,20 @@ class MyPromise<T = any> {
     );
   }
 }
+
+new MyPromise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('첫번째 프라미스');
+  }, 1000);
+})
+  .then((res) => {
+    console.log(res);
+    return new MyPromise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('두번째 프라미스');
+      }, 1000);
+    });
+  })
+  .then((res) => {
+    console.log(res);
+  });
