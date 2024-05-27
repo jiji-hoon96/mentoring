@@ -1,15 +1,22 @@
-import PROMISES_STATE from './utils/state.js';
+const PROMISES_STATE = Object.freeze({
+  pending: 'PENDING',
+  fulfilled: 'fulfilled',
+  rejected: 'rejected',
+});
 
-class MyPromise {
-  #state = PROMISES_STATE.pending;
+type Executor<T> = (
+  resolve: (value: T | MyPromise<T>) => void,
+  reject: (reason?: any) => void
+) => void;
 
-  #value = null;
+class MyPromise<T = any> {
+  #state: string = PROMISES_STATE.pending;
+  #value: T | null = null;
 
-  #catchCallbacks = [];
+  #catchCallbacks: ((reason?: any) => void)[] = [];
+  #thenCallbacks: ((value: T) => void)[] = [];
 
-  #thenCallbacks = [];
-
-  constructor(executor) {
+  constructor(executor: Executor<T>) {
     try {
       executor(this.#resolve.bind(this), this.#reject.bind(this));
     } catch (error) {
@@ -17,9 +24,9 @@ class MyPromise {
     }
   }
 
-  #runCallbacks() {
+  #runCallbacks(): void {
     if (this.#state === PROMISES_STATE.fulfilled) {
-      this.#thenCallbacks.forEach((callback) => callback(this.#value));
+      this.#thenCallbacks.forEach((callback) => callback(this.#value as T));
       this.#thenCallbacks = [];
     }
 
@@ -29,7 +36,7 @@ class MyPromise {
     }
   }
 
-  #update(state, value) {
+  #update(state: string, value: T | MyPromise<T> | any): void {
     queueMicrotask(() => {
       if (this.#state !== PROMISES_STATE.pending) return;
       if (value instanceof MyPromise) {
@@ -42,19 +49,22 @@ class MyPromise {
     });
   }
 
-  #resolve(value) {
+  #resolve(value: T | MyPromise<T>): void {
     this.#update(PROMISES_STATE.fulfilled, value);
   }
 
-  #reject(error) {
+  #reject(error: any): void {
     this.#update(PROMISES_STATE.rejected, error);
   }
 
-  then(thenCallback, catchCallback) {
-    return new MyPromise((resolve, reject) => {
-      this.#thenCallbacks.push((value) => {
+  then<TResult = T>(
+    thenCallback?: (value: T) => TResult | MyPromise<TResult>,
+    catchCallback?: (reason?: any) => TResult | MyPromise<TResult>
+  ): MyPromise<TResult> {
+    return new MyPromise<TResult>((resolve, reject) => {
+      this.#thenCallbacks.push((value: T) => {
         if (!thenCallback) {
-          resolve(value);
+          resolve(value as unknown as TResult); // TypeScript type assertion
           return;
         }
 
@@ -80,11 +90,13 @@ class MyPromise {
     });
   }
 
-  catch(catchCallback) {
+  catch<TResult = T>(
+    catchCallback?: (reason?: any) => TResult | MyPromise<TResult>
+  ): MyPromise<TResult> {
     return this.then(undefined, catchCallback);
   }
 
-  finally(callback) {
+  finally(callback: () => void): MyPromise<T> {
     return this.then(
       (value) => {
         callback();
@@ -97,20 +109,3 @@ class MyPromise {
     );
   }
 }
-
-new MyPromise((resolve, reject) => {
-  setTimeout(() => {
-    resolve('첫번째 프라미스');
-  }, 1000);
-})
-  .then((res) => {
-    console.log(res);
-    return new MyPromise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('두번째 프라미스');
-      }, 1000);
-    });
-  })
-  .then((res) => {
-    console.log(res);
-  });
