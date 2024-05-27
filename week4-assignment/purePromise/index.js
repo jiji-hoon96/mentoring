@@ -98,21 +98,4 @@ class MyPromise {
   }
 }
 
-new MyPromise((resolve, reject) => {
-  setTimeout(() => {
-    resolve('첫번째 프라미스');
-  }, 1000);
-})
-  .then((res) => {
-    console.log(res);
-    return new MyPromise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('두번째 프라미스');
-      }, 1000);
-    });
-  })
-  .then((res) => {
-    console.log(res);
-  });
-
 export default MyPromise;
