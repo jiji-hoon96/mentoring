@@ -114,3 +114,5 @@ new MyPromise((resolve, reject) => {
   .then((res) => {
     console.log(res);
   });
+
+export default MyPromise;
