@@ -7,14 +7,34 @@ const delay = (ms) =>
     setTimeout(resolve, ms);
   });
 
+const addIcon = (createEl) => {
+  const iconEl = document.createElement('span');
+  iconEl.classList.add('material-symbols-outlined', 'on');
+  iconEl.innerText = 'history';
+  createEl.appendChild(iconEl);
+};
+
+const removeIcon = (createEl) => {
+  const iconEl = createEl.querySelector('.material-symbols-outlined');
+  if (iconEl) {
+    createEl.removeChild(iconEl);
+  }
+};
+
 const moveTask = (area, createEl) => {
-  const el = document.getElementById(area);
-  if (!el) return;
+  const areaEl = document.getElementById(area);
+  if (!areaEl) return;
 
   if (area === 'stack') {
-    el.prepend(createEl);
+    areaEl.prepend(createEl);
   } else {
-    el.appendChild(createEl);
+    areaEl.appendChild(createEl);
+  }
+
+  if (area === 'webApi') {
+    addIcon(createEl);
+  } else if (area === 'macroQueue' || area === 'microQueue') {
+    removeIcon(createEl);
   }
 
   return delay(1000);
@@ -27,8 +47,9 @@ const isPendingMacroTask = (task, microEl) =>
 
 const processEventLoop = (createEl, eventLoopIconEl) => {
   eventLoopIconEl?.classList.add('on');
-  moveTask('stack', createEl).then(() => moveTask('console', createEl));
-  eventLoopIconEl?.classList.remove('on');
+  moveTask('stack', createEl)
+    .then(() => eventLoopIconEl?.classList.remove('on'))
+    .then(() => moveTask('console', createEl));
 };
 
 const createTaskElement = (task, innerText) => {
