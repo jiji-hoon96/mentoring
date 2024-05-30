@@ -20,6 +20,17 @@ const moveTask = (area, createEl) => {
   return delay(1000);
 };
 
+const isTasksInStack = (stackEl) => stackEl && stackEl.childElementCount > 0;
+
+const isPendingMacroTask = (task, microEl) =>
+  task === 'asyncMacroTask' && microEl && microEl.childElementCount > 0;
+
+const processEventLoop = (createEl, eventLoopIconEl) => {
+  eventLoopIconEl?.classList.add('on');
+  moveTask('stack', createEl).then(() => moveTask('console', createEl));
+  eventLoopIconEl?.classList.remove('on');
+};
+
 const createTaskElement = (task, innerText) => {
   let index;
   switch (task) {
@@ -42,21 +53,36 @@ const createTaskElement = (task, innerText) => {
   return createEl;
 };
 
+const asyncTask = (task, createEl) => {
+  const stackEl = document.querySelector('#stack');
+  const microEl = document.querySelector('#microQueue');
+  const eventLoopIconEl = document.querySelector('#eventLoop span');
+  const eventQueue = task === 'asyncMacroTask' ? 'macroQueue' : 'microQueue';
+
+  moveTask(eventQueue, createEl).then(() => {
+    const loop = setInterval(() => {
+      if (isTasksInStack(stackEl) || isPendingMacroTask(task, microEl)) return;
+      clearInterval(loop);
+      processEventLoop(createEl, eventLoopIconEl);
+    }, 0);
+  });
+};
+
+const handleAsyncTask = (task, createEl) => {
+  moveTask('webApi', createEl).then(() => asyncTask(task, createEl));
+};
+
 const handleButtonClick = (event) => {
   const { id: task, innerText } = event.target;
   const createEl = createTaskElement(task, innerText);
   moveTask('stack', createEl).then(() => {
     if (task !== 'syncFunc') {
-      // async handle code 작성 예정
+      handleAsyncTask(task, createEl);
     } else {
       moveTask('console', createEl);
     }
   });
 };
-
-document.querySelectorAll('#buttons button').forEach((button) => {
-  button.addEventListener('click', handleButtonClick);
-});
 
 const clearConsole = () => {
   const consoleEl = document.querySelector('#console');
@@ -64,6 +90,10 @@ const clearConsole = () => {
     consoleEl.innerHTML = '';
   }
 };
+
+document.querySelectorAll('#buttons button').forEach((button) => {
+  button.addEventListener('click', handleButtonClick);
+});
 
 document.querySelector('.refreshBtn').addEventListener('click', () => {
   window.location.reload();

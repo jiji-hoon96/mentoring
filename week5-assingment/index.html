@@ -18,38 +18,36 @@
       <button class="refreshBtn">새로고침</button>
       <div id="buttons">
         <button id="syncFunc">일반 함수</button>
-        <button id="asyncMacroTask">비동기 함수<br />(Macro Task Queue)</button>
-        <button id="asyncMicroTask">
-          비동기 함수 <br />(Micro Task Queue)
-        </button>
+        <button id="asyncMacroTask">MACROTASK QUEUE</button>
+        <button id="asyncMicroTask">MICROTASK QUEUE</button>
       </div>
     </header>
 
     <main id="main">
       <setcion class="box stack-area">
-        <h3 class="box-title">Call Stack</h3>
+        <h3 class="box-title">CALL STACK</h3>
         <div id="stack" class="box-content"></div>
       </setcion>
       <setcion class="box webapis-area">
-        <h3 class="box-title">webAPis</h3>
-        <div id="webApis" class="box-content"></div>
+        <h3 class="box-title">WEB API</h3>
+        <div id="webApi" class="box-content"></div>
       </setcion>
       <setcion class="box eventloop-area">
-        <h3 class="box-title">Event Loop</h3>
+        <h3 class="box-title">EVENT LOOP</h3>
         <div id="eventLoop" class="box_content">
           <span class="material-symbols-outlined">manage_history</span>
         </div>
       </setcion>
       <setcion class="box macro-area">
-        <h3 class="box-title">Macro Task Queue</h3>
+        <h3 class="box-title">MACROTASK QUEUE</h3>
         <div id="macroQueue" class="box-content"></div>
       </setcion>
       <setcion class="box micro-area">
-        <h3 class="box-title">Micro Task Queue</h3>
+        <h3 class="box-title">MICROTASK QUEUE</h3>
         <div id="microQueue" class="box-content"></div>
       </setcion>
       <setcion class="box console-area">
-        <h3 class="box-title">Console</h3>
+        <h3 class="box-title">CONSOLE</h3>
         <div id="console" class="box-content"></div>
         <button onclick="clearConsole()">지우기</button>
       </setcion>
