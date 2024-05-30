@@ -4,10 +4,7 @@ let microIndex = 0;
 let microTasks = 0;
 let macroTasks = 0;
 
-const delay = (ms) =>
-  new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const addIcon = (createEl) => {
   const iconEl = document.createElement('span');
@@ -36,7 +33,7 @@ const moveTask = (area, createEl) => {
 
   if (area === 'webApi') {
     addIcon(createEl);
-  } else if (area === 'macroQueue' || area === 'microQueue') {
+  } else {
     removeIcon(createEl);
   }
 
@@ -106,17 +103,19 @@ const handleAsyncTask = (task, createEl) => {
 const handleButtonClick = (event) => {
   const { id: task, innerText } = event.target;
   const createEl = createTaskElement(task, innerText);
+
   moveTask('stack', createEl).then(() => {
-    if (task !== 'syncFunc') {
-      if (task === 'asyncMacroTask') {
-        macroTasks++;
-      } else {
-        microTasks++;
-      }
-      handleAsyncTask(task, createEl);
-    } else {
-      moveTask('console', createEl);
+    if (task === 'syncFunc') {
+      return moveTask('console', createEl);
     }
+
+    if (task === 'asyncMacroTask') {
+      macroTasks++;
+    } else {
+      microTasks++;
+    }
+
+    handleAsyncTask(task, createEl);
   });
 };
 
