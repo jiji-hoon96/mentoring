@@ -25,6 +25,7 @@
     "no-underscore-dangle": "off",
     "no-plusplus": "off",
     "vars-on-top": "off",
-    "no-var": "off"
+    "no-var": "off",
+    "consistent-return": "off"
   }
 }
