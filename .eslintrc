@@ -26,6 +26,7 @@
     "no-plusplus": "off",
     "vars-on-top": "off",
     "no-var": "off",
-    "consistent-return": "off"
+    "consistent-return": "off",
+    "no-promise-executor-return": "off"
   }
 }
