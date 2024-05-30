@@ -4,6 +4,31 @@ let microIndex = 0;
 let microTasks = 0;
 let macroTasks = 0;
 
+const microTaskList = [
+  'process.nextTick()',
+  'Promise callbacks',
+  'Async/Await',
+  'queueMicrotask()',
+  'MutationObserver',
+  'IntersectionObserver',
+  'PerformanceObserver',
+];
+
+const macroTaskList = [
+  'setTimeout',
+  'setInterval',
+  'setImmediate',
+  'requestAnimationFrame',
+  'I/O',
+  'UI rendering',
+  'postMessage',
+  'MessageChannel',
+  'IndexedDB',
+  'WebSQL',
+  'FileReader',
+  'fetch',
+];
+
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const addIcon = (createEl) => {
@@ -101,8 +126,23 @@ const handleAsyncTask = (task, createEl) => {
 };
 
 const handleButtonClick = (event) => {
-  const { id: task, innerText } = event.target;
-  const createEl = createTaskElement(task, innerText);
+  let createEl;
+  const { id: task } = event.target;
+  if (task === 'syncFunc') {
+    createEl = createTaskElement(task, 'Function');
+  }
+  if (task === 'asyncMacroTask') {
+    createEl = createTaskElement(
+      task,
+      macroTaskList[Math.floor(Math.random() * macroTaskList.length)]
+    );
+  }
+  if (task === 'asyncMicroTask') {
+    createEl = createTaskElement(
+      task,
+      microTaskList[Math.floor(Math.random() * microTaskList.length)]
+    );
+  }
 
   moveTask('stack', createEl).then(() => {
     if (task === 'syncFunc') {

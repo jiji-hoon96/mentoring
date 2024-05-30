@@ -3,6 +3,23 @@
   margin-top: 30px;
 }
 
+.title {
+  display: flex;
+  align-items: center;
+}
+
+.refreshBtn {
+  margin-left: 20px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
+
+.refreshBtn:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
+}
+
 .box {
   position: absolute;
   display: flex;
@@ -30,20 +47,30 @@
   border: 1px dashed #000;
 }
 
+#macroQueue .asyncMacroTask {
+  width: 200px;
+}
+
+#microQueue .asyncMicroTask {
+  width: 200px;
+}
+
 .stack-area {
   top: 0;
   left: 282px;
   height: 330px;
+  overflow-y: scroll;
 }
 .webapis-area {
   top: 0;
   left: 570px;
   height: 330px;
+  overflow-y: scroll;
 }
 
 .eventloop-area {
   top: 347px;
-  left: 404px;
+  left: 265px;
   width: 150px;
   height: 80px;
   text-align: center;
@@ -58,19 +85,27 @@
 .macro-area {
   top: 350px;
   left: 570px;
-  width: 500px;
+  width: 800px;
   height: 160px;
 }
 .micro-area {
   top: 510px;
   left: 570px;
-  width: 500px;
   height: 160px;
+  width: 800px;
 }
 .macro-area .box-content,
 .micro-area .box-content {
   display: flex;
+  overflow-x: scroll;
 }
+
+.console-area .box-content,
+.stack-area .box-content,
+.webapis-area .box-content {
+  overflow-y: scroll;
+}
+
 .macro-area .box-content div,
 .micro-area .box-content div {
   width: 80px;
@@ -80,9 +115,9 @@
 .console-area {
   top: 0;
   left: 0;
-  height: 670px;
+  height: 665px;
 }
-.console-area button {
+.console-area span {
   position: absolute;
   top: 10px;
   right: 0;
@@ -98,11 +133,41 @@
   background-color: rgba(255, 0, 0, 0.37);
 }
 
+.macroBtn {
+  background-color: rgba(255, 213, 0, 0.5);
+}
+
+.microBtn {
+  background-color: rgba(255, 0, 0, 0.37);
+}
+
+.funcBtn {
+  background-color: rgba(0, 106, 255, 0.32);
+}
+
 #buttons button {
-  margin-top: 10px;
+  margin: 10px;
   width: 200px;
   height: 50px;
   vertical-align: bottom;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+#buttons button:hover {
+  transform: scale(1.03);
+  transition: transform 0.3s ease-in-out;
+}
+
+#clearBtn {
+  border: none;
+  cursor: pointer;
+}
+
+#clearBtn:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
 }
 
 /* icon */

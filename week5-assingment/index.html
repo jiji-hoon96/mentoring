@@ -14,12 +14,14 @@
 
   <body>
     <header>
-      <h1>JS 이벤트루프 시뮬레이션 도구</h1>
-      <button class="refreshBtn">새로고침</button>
+      <div class="title">
+        <h1>JavaScript Event Loop</h1>
+        <span class="material-symbols-outlined refreshBtn"> refresh </span>
+      </div>
       <div id="buttons">
-        <button id="syncFunc">일반 함수</button>
-        <button id="asyncMacroTask">MACROTASK QUEUE</button>
-        <button id="asyncMicroTask">MICROTASK QUEUE</button>
+        <button class="funcBtn" id="syncFunc">FUNCTION</button>
+        <button class="macroBtn" id="asyncMacroTask">MACROTASK QUEUE</button>
+        <button class="microBtn" id="asyncMicroTask">MICROTASK QUEUE</button>
       </div>
     </header>
 
@@ -49,7 +51,13 @@
       <setcion class="box console-area">
         <h3 class="box-title">CONSOLE</h3>
         <div id="console" class="box-content"></div>
-        <button onclick="clearConsole()">지우기</button>
+        <span
+          id="clearBtn"
+          class="material-symbols-outlined"
+          onclick="clearConsole()"
+        >
+          delete
+        </span>
       </setcion>
     </main>
   </body>
