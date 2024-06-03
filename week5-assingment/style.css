@@ -9,12 +9,38 @@
 }
 
 .refreshBtn {
-  margin-left: 20px;
+  margin: 0px 20px;
   cursor: pointer;
   border: none;
   background-color: transparent;
 }
 
+.linkBtn {
+  font-size: 24px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  color: #000;
+  animation: colorChange 1s infinite;
+}
+
+@keyframes colorChange {
+  0% {
+    color: red;
+  }
+  25% {
+    color: orange;
+  }
+  50% {
+    color: yellow;
+  }
+  75% {
+    color: green;
+  }
+  100% {
+    color: blue;
+  }
+}
 .refreshBtn:hover {
   transform: scale(1.1);
   transition: transform 0.3s ease-in-out;
