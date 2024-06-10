@@ -1,23 +1,30 @@
 import { getNewIndex, getTaskCount } from './taskManager.js';
 import { delay } from './utils.js';
 
-export const addIcon = (createEl) => {
-  const iconEl = document.createElement('span');
-  iconEl.classList.add('material-symbols-outlined', 'on');
-  iconEl.innerText = 'history';
-  createEl.appendChild(iconEl);
+const toggleIcon = (createEl, add) => {
+  const iconEl = createEl.querySelector('.material-symbols-outlined');
+  if (add && !iconEl) {
+    const newIconEl = document.createElement('span');
+    newIconEl.classList.add('material-symbols-outlined', 'on');
+    newIconEl.innerText = 'history';
+    createEl.appendChild(newIconEl);
+  } else if (!add && iconEl) {
+    createEl.removeChild(iconEl);
+  }
 };
 
-export const removeIcon = (createEl) => {
-  const iconEl = createEl.querySelector('.material-symbols-outlined');
-  if (iconEl) {
-    createEl.removeChild(iconEl);
+const updateEventLoopIcon = () => {
+  const eventLoopIconEl = document.querySelector('#eventLoop span');
+  if (
+    getTaskCount('asyncMacroTask') === 0 &&
+    getTaskCount('asyncMicroTask') === 0
+  ) {
+    eventLoopIconEl?.classList.remove('on');
   }
 };
 
 export const moveTask = (area, createEl) => {
   const areaEl = document.getElementById(area);
-  const eventLoopIconEl = document.querySelector('#eventLoop span');
   if (!areaEl) return;
 
   if (area === 'stack') {
@@ -26,18 +33,8 @@ export const moveTask = (area, createEl) => {
     areaEl.appendChild(createEl);
   }
 
-  if (area === 'webApi') {
-    addIcon(createEl);
-  } else {
-    removeIcon(createEl);
-  }
-
-  if (
-    getTaskCount('asyncMacroTask') === 0 &&
-    getTaskCount('asyncMicroTask') === 0
-  ) {
-    eventLoopIconEl?.classList.remove('on');
-  }
+  toggleIcon(createEl, area === 'webApi');
+  updateEventLoopIcon();
 
   return delay(1000);
 };

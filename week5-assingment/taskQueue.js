@@ -1,0 +1,25 @@
+export const taskLists = {
+  asyncMacroTask: [
+    'setTimeout',
+    'setInterval',
+    'setImmediate',
+    'requestAnimationFrame',
+    'I/O',
+    'UI rendering',
+    'postMessage',
+    'MessageChannel',
+    'IndexedDB',
+    'WebSQL',
+    'FileReader',
+    'fetch',
+  ],
+  asyncMicroTask: [
+    'process.nextTick()',
+    'Promise callbacks',
+    'Async/Await',
+    'queueMicrotask()',
+    'MutationObserver',
+    'IntersectionObserver',
+    'PerformanceObserver',
+  ],
+};
