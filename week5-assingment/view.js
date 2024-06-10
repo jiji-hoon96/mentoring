@@ -1,33 +1,10 @@
-let functionIndex = 0;
-let macroIndex = 0;
-let microIndex = 0;
-let microTasks = 0;
-let macroTasks = 0;
-
-const microTaskList = [
-  'process.nextTick()',
-  'Promise callbacks',
-  'Async/Await',
-  'queueMicrotask()',
-  'MutationObserver',
-  'IntersectionObserver',
-  'PerformanceObserver',
-];
-
-const macroTaskList = [
-  'setTimeout',
-  'setInterval',
-  'setImmediate',
-  'requestAnimationFrame',
-  'I/O',
-  'UI rendering',
-  'postMessage',
-  'MessageChannel',
-  'IndexedDB',
-  'WebSQL',
-  'FileReader',
-  'fetch',
-];
+import {
+  getNextIndex,
+  incrementTaskCount,
+  decrementTaskCount,
+  getTaskCounts,
+  getRandomTask,
+} from './domain.js';
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -62,6 +39,7 @@ const moveTask = (area, createEl) => {
     removeIcon(createEl);
   }
 
+  const { microTasks, macroTasks } = getTaskCounts();
   if (microTasks === 0 && macroTasks === 0) {
     eventLoopIconEl?.classList.remove('on');
   }
@@ -75,30 +53,13 @@ const isPendingMacroTask = (task, microEl) =>
   task === 'asyncMacroTask' && microEl && microEl.childElementCount > 0;
 
 const processEventLoop = (createEl, eventLoopIconEl, task) => {
-  if (task === 'asyncMacroTask') {
-    macroTasks--;
-  } else {
-    microTasks--;
-  }
+  decrementTaskCount(task);
   eventLoopIconEl?.classList.add('on');
   moveTask('stack', createEl).then(() => moveTask('console', createEl));
 };
 
 const createTaskElement = (task, innerText) => {
-  let index;
-  switch (task) {
-    case 'syncFunc':
-      index = ++functionIndex;
-      break;
-    case 'asyncMacroTask':
-      index = ++macroIndex;
-      break;
-    case 'asyncMicroTask':
-      index = ++microIndex;
-      break;
-    default:
-      index = '';
-  }
+  const index = getNextIndex(task);
 
   const createEl = document.createElement('div');
   createEl.innerText = `${index ? `${index} - ` : ''}${innerText}`;
@@ -132,16 +93,10 @@ const handleButtonClick = (event) => {
     createEl = createTaskElement(task, 'Function');
   }
   if (task === 'asyncMacroTask') {
-    createEl = createTaskElement(
-      task,
-      macroTaskList[Math.floor(Math.random() * macroTaskList.length)]
-    );
+    createEl = createTaskElement(task, getRandomTask(task));
   }
   if (task === 'asyncMicroTask') {
-    createEl = createTaskElement(
-      task,
-      microTaskList[Math.floor(Math.random() * microTaskList.length)]
-    );
+    createEl = createTaskElement(task, getRandomTask(task));
   }
 
   moveTask('stack', createEl).then(() => {
@@ -149,12 +104,7 @@ const handleButtonClick = (event) => {
       return moveTask('console', createEl);
     }
 
-    if (task === 'asyncMacroTask') {
-      macroTasks++;
-    } else {
-      microTasks++;
-    }
-
+    incrementTaskCount(task);
     handleAsyncTask(task, createEl);
   });
 };
@@ -173,3 +123,5 @@ document.querySelectorAll('#buttons button').forEach((button) => {
 document.querySelector('.refreshBtn').addEventListener('click', () => {
   window.location.reload();
 });
+
+window.clearConsole = clearConsole;
