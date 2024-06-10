@@ -29,8 +29,8 @@ const macroTaskList = [
   'fetch',
 ];
 
-export const getNextIndex = (task) => {
-  switch (task) {
+export const getNewIndex = (taskType) => {
+  switch (taskType) {
     case 'syncFunc':
       return ++functionIndex;
     case 'asyncMacroTask':
@@ -42,30 +42,27 @@ export const getNextIndex = (task) => {
   }
 };
 
-export const incrementTaskCount = (task) => {
-  if (task === 'asyncMacroTask') {
+export const incrementTaskCount = (taskType) => {
+  if (taskType === 'asyncMacroTask') {
     macroTasks++;
-  } else {
+  } else if (taskType === 'asyncMicroTask') {
     microTasks++;
   }
 };
 
-export const decrementTaskCount = (task) => {
-  if (task === 'asyncMacroTask') {
+export const decrementTaskCount = (taskType) => {
+  if (taskType === 'asyncMacroTask') {
     macroTasks--;
-  } else {
+  } else if (taskType === 'asyncMicroTask') {
     microTasks--;
   }
 };
 
-export const getTaskCounts = () => ({ microTasks, macroTasks });
+export const getTaskCount = (taskType) => {
+  return taskType === 'asyncMacroTask' ? macroTasks : microTasks;
+};
 
-export const getRandomTask = (taskType) => {
-  if (taskType === 'asyncMacroTask') {
-    return macroTaskList[Math.floor(Math.random() * macroTaskList.length)];
-  }
-  if (taskType === 'asyncMicroTask') {
-    return microTaskList[Math.floor(Math.random() * microTaskList.length)];
-  }
-  return '';
+export const getRandomTaskName = (taskType) => {
+  const list = taskType === 'asyncMacroTask' ? macroTaskList : microTaskList;
+  return list[Math.floor(Math.random() * list.length)];
 };
