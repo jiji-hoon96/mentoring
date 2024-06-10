@@ -23,12 +23,9 @@ const handleButtonClick = (event) => {
   });
 };
 
-const clearConsole = () => {
-  const consoleEl = document.querySelector('#console');
-  if (consoleEl) {
-    consoleEl.innerHTML = '';
-  }
-};
+document.querySelector('#clearBtn').addEventListener('click', () => {
+  document.querySelector('#console').innerHTML = '';
+});
 
 document.querySelectorAll('#buttons button').forEach((button) => {
   button.addEventListener('click', handleButtonClick);
