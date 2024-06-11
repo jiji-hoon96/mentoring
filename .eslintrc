@@ -25,6 +25,9 @@
     "no-underscore-dangle": "off",
     "no-plusplus": "off",
     "vars-on-top": "off",
-    "no-var": "off"
+    "no-var": "off",
+    "no-prototype-builtins": "off",
+    "consistent-return": "off",
+    "no-promise-executor-return": "off"
   }
 }
