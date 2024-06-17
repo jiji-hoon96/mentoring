@@ -1,3 +1,4 @@
+/** @jsx createJsxElement */
 import { FORM_DATA } from './common.js';
 
 export default function sectionPage3() {

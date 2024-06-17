@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-exports['default'] = createRouter;
+exports["default"] = createRouter;
 function createRouter() {
   var routes = [];
   var ROUTE_PARAMETER_REGEXP = /:(\w+)/g;
@@ -11,16 +11,14 @@ function createRouter() {
   var router = {
     addRouter: function addRouter(fragment, component) {
       var params = [];
-      var parsedFragment = fragment
-        .replace(ROUTE_PARAMETER_REGEXP, function (_, paramsName) {
-          params.push(paramsName);
-          return URL_REGEXP;
-        })
-        .replace(/\//g, '\\/');
+      var parsedFragment = fragment.replace(ROUTE_PARAMETER_REGEXP, function (_, paramsName) {
+        params.push(paramsName);
+        return URL_REGEXP;
+      }).replace(/\//g, '\\/');
       routes.push({
-        fragmentRegExp: new RegExp('^'.concat(parsedFragment, '$')),
+        fragmentRegExp: new RegExp("^".concat(parsedFragment, "$")),
         component: component,
-        params: params,
+        params: params
       });
       return this;
     },
@@ -52,15 +50,12 @@ function createRouter() {
     },
     navigate: function navigate(fragment, replace) {
       if (replace) {
-        var href = window.location.href.replace(
-          window.location.hash,
-          '#' + fragment
-        );
+        var href = window.location.href.replace(window.location.hash, '#' + fragment);
         window.location.replace(fragment);
       } else {
         window.location.hash = fragment;
       }
-    },
+    }
   };
   return router;
 }

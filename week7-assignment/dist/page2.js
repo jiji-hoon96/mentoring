@@ -5,18 +5,20 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports['default'] = sectionPage2;
 var _common = require('./common.js');
+/** @jsx createJsxElement */
+
 function sectionPage2() {
-  return /*#__PURE__*/ React.createElement(
+  return createJsxElement(
     'div',
     null,
-    /*#__PURE__*/ React.createElement(
+    createJsxElement(
       'header',
       null,
-      /*#__PURE__*/ React.createElement('div', {
+      createJsxElement('div', {
         class: 'bgPurple',
       }),
-      /*#__PURE__*/ React.createElement('h1', null, 'Survey'),
-      /*#__PURE__*/ React.createElement(
+      createJsxElement('h1', null, 'Survey'),
+      createJsxElement(
         'strong',
         {
           class: 'require',
@@ -24,31 +26,31 @@ function sectionPage2() {
         '* \uD45C\uC2DC\uB294 \uD544\uC218 \uC9C8\uBB38\uC784'
       )
     ),
-    /*#__PURE__*/ React.createElement(
+    createJsxElement(
       'form',
       {
         name: 'form',
       },
-      /*#__PURE__*/ React.createElement(
+      createJsxElement(
         'h2',
         {
           class: 'bgPurple',
         },
         'section2'
       ),
-      /*#__PURE__*/ React.createElement(
+      createJsxElement(
         'div',
         {
           class: 'box',
         },
-        /*#__PURE__*/ React.createElement(
+        createJsxElement(
           'fieldset',
           null,
-          /*#__PURE__*/ React.createElement(
+          createJsxElement(
             'legend',
             null,
             'select',
-            /*#__PURE__*/ React.createElement(
+            createJsxElement(
               'span',
               {
                 class: 'require',
@@ -56,20 +58,20 @@ function sectionPage2() {
               '*'
             )
           ),
-          /*#__PURE__*/ React.createElement(
+          createJsxElement(
             'select',
             {
               name: 'select',
               id: 'select',
             },
-            /*#__PURE__*/ React.createElement(
+            createJsxElement(
               'option',
               {
                 value: '',
               },
               '\uC120\uD0DD'
             ),
-            /*#__PURE__*/ React.createElement(
+            createJsxElement(
               'option',
               {
                 value: '1',
@@ -77,7 +79,7 @@ function sectionPage2() {
               },
               'select option1'
             ),
-            /*#__PURE__*/ React.createElement(
+            createJsxElement(
               'option',
               {
                 value: '2',
@@ -85,7 +87,7 @@ function sectionPage2() {
               },
               'select option1'
             ),
-            /*#__PURE__*/ React.createElement(
+            createJsxElement(
               'option',
               {
                 value: '3',
@@ -95,25 +97,25 @@ function sectionPage2() {
             )
           )
         ),
-        /*#__PURE__*/ React.createElement(
+        createJsxElement(
           'small',
           null,
           '\u203B \uD544\uC218 \uD56D\uBAA9\uC785\uB2C8\uB2E4.'
         )
       ),
-      /*#__PURE__*/ React.createElement(
+      createJsxElement(
         'div',
         {
           class: 'box',
         },
-        /*#__PURE__*/ React.createElement(
+        createJsxElement(
           'fieldset',
           null,
-          /*#__PURE__*/ React.createElement(
+          createJsxElement(
             'legend',
             null,
             'textarea',
-            /*#__PURE__*/ React.createElement(
+            createJsxElement(
               'span',
               {
                 class: 'require',
@@ -121,7 +123,7 @@ function sectionPage2() {
               '*'
             )
           ),
-          /*#__PURE__*/ React.createElement(
+          createJsxElement(
             'textarea',
             {
               name: 'textarea',
@@ -130,18 +132,18 @@ function sectionPage2() {
             _common.FORM_DATA.textarea || ''
           )
         ),
-        /*#__PURE__*/ React.createElement(
+        createJsxElement(
           'small',
           null,
           '\u203B \uD544\uC218 \uD56D\uBAA9\uC785\uB2C8\uB2E4.'
         )
       ),
-      /*#__PURE__*/ React.createElement(
+      createJsxElement(
         'div',
         {
           class: 'buttons',
         },
-        /*#__PURE__*/ React.createElement(
+        createJsxElement(
           'button',
           {
             type: 'button',
@@ -150,7 +152,7 @@ function sectionPage2() {
           },
           '\uB4A4\uB85C'
         ),
-        /*#__PURE__*/ React.createElement(
+        createJsxElement(
           'button',
           {
             type: 'button',
@@ -160,7 +162,7 @@ function sectionPage2() {
           },
           '\uC81C\uCD9C'
         ),
-        /*#__PURE__*/ React.createElement(
+        createJsxElement(
           'button',
           {
             type: 'button',

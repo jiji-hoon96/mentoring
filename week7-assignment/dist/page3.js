@@ -5,28 +5,30 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports['default'] = sectionPage3;
 var _common = require('./common.js');
+/** @jsx createJsxElement */
+
 function sectionPage3() {
-  return /*#__PURE__*/ React.createElement(
+  return createJsxElement(
     'div',
     null,
-    /*#__PURE__*/ React.createElement(
+    createJsxElement(
       'header',
       null,
-      /*#__PURE__*/ React.createElement('div', {
+      createJsxElement('div', {
         class: 'bgPurple',
       }),
-      /*#__PURE__*/ React.createElement('h1', null, 'Survey'),
-      /*#__PURE__*/ React.createElement(
+      createJsxElement('h1', null, 'Survey'),
+      createJsxElement(
         'div',
         {
           class: 'result',
         },
         '\uC751\uB2F5\uC774 \uAE30\uB85D\uB418\uC5C8\uC2B5\uB2C8\uB2E4.',
-        /*#__PURE__*/ React.createElement('br', null),
+        createJsxElement('br', null),
         '$',
         JSON.stringify(_common.FORM_DATA)
       ),
-      /*#__PURE__*/ React.createElement(
+      createJsxElement(
         'button',
         {
           class: 'first',

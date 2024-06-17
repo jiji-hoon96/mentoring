@@ -1,4 +1,4 @@
-function h(type, props, ...children) {
+function createJsxElement(type, props, ...children) {
   const element = document.createElement(type);
 
   Object.keys(props || {}).forEach((key) => {

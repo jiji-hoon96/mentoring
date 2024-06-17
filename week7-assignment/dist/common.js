@@ -1,14 +1,12 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
-  value: true,
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 exports.FORM_DATA = void 0;
-var FORM_DATA = (exports.FORM_DATA = sessionStorage.getItem('data')
-  ? JSON.parse(sessionStorage.getItem('data'))
-  : {
-      radio: '',
-      checkbox: [],
-      select: '',
-      textarea: '',
-    });
+var FORM_DATA = exports.FORM_DATA = sessionStorage.getItem('data') ? JSON.parse(sessionStorage.getItem('data')) : {
+  radio: '',
+  checkbox: [],
+  select: '',
+  textarea: ''
+};

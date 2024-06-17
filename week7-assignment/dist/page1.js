@@ -5,20 +5,20 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports['default'] = sectionPage1;
 var _common = require('./common.js');
-/** @jsx h */
+/** @jsx createJsxElement */
 
 function sectionPage1() {
-  return h(
+  return createJsxElement(
     'div',
     null,
-    h(
+    createJsxElement(
       'header',
       null,
-      h('div', {
+      createJsxElement('div', {
         className: 'bgPurple',
       }),
-      h('h1', null, 'Survey'),
-      h(
+      createJsxElement('h1', null, 'Survey'),
+      createJsxElement(
         'strong',
         {
           className: 'require',
@@ -26,26 +26,26 @@ function sectionPage1() {
         '* \uD45C\uC2DC\uB294 \uD544\uC218 \uC9C8\uBB38\uC784'
       )
     ),
-    h(
+    createJsxElement(
       'form',
       {
         name: 'form',
         id: 'form1',
         method: 'post',
       },
-      h(
+      createJsxElement(
         'div',
         {
           className: 'box',
         },
-        h(
+        createJsxElement(
           'fieldset',
           null,
-          h(
+          createJsxElement(
             'legend',
             null,
             'radio input',
-            h(
+            createJsxElement(
               'span',
               {
                 className: 'require',
@@ -53,15 +53,15 @@ function sectionPage1() {
               '*'
             )
           ),
-          h(
+          createJsxElement(
             'div',
             {
               className: 'fieldBox',
             },
-            h(
+            createJsxElement(
               'label',
               null,
-              h('input', {
+              createJsxElement('input', {
                 type: 'radio',
                 name: 'radio',
                 value: 'radio1',
@@ -70,15 +70,15 @@ function sectionPage1() {
               'radio option1'
             )
           ),
-          h(
+          createJsxElement(
             'div',
             {
               className: 'fieldBox',
             },
-            h(
+            createJsxElement(
               'label',
               null,
-              h('input', {
+              createJsxElement('input', {
                 type: 'radio',
                 name: 'radio',
                 value: 'radio2',
@@ -87,15 +87,15 @@ function sectionPage1() {
               'radio option2'
             )
           ),
-          h(
+          createJsxElement(
             'div',
             {
               className: 'fieldBox',
             },
-            h(
+            createJsxElement(
               'label',
               null,
-              h('input', {
+              createJsxElement('input', {
                 type: 'radio',
                 name: 'radio',
                 value: 'radio3',
@@ -105,21 +105,25 @@ function sectionPage1() {
             )
           )
         ),
-        h('small', null, '\u203B \uD544\uC218 \uD56D\uBAA9\uC785\uB2C8\uB2E4.')
+        createJsxElement(
+          'small',
+          null,
+          '\u203B \uD544\uC218 \uD56D\uBAA9\uC785\uB2C8\uB2E4.'
+        )
       ),
-      h(
+      createJsxElement(
         'div',
         {
           className: 'box',
         },
-        h(
+        createJsxElement(
           'fieldset',
           null,
-          h(
+          createJsxElement(
             'legend',
             null,
             'checkbox input',
-            h(
+            createJsxElement(
               'span',
               {
                 className: 'require',
@@ -127,15 +131,15 @@ function sectionPage1() {
               '*'
             )
           ),
-          h(
+          createJsxElement(
             'div',
             {
               className: 'fieldBox',
             },
-            h(
+            createJsxElement(
               'label',
               null,
-              h('input', {
+              createJsxElement('input', {
                 type: 'checkbox',
                 name: 'checkbox',
                 value: 'checkbox1',
@@ -144,15 +148,15 @@ function sectionPage1() {
               'checkbox option1'
             )
           ),
-          h(
+          createJsxElement(
             'div',
             {
               className: 'fieldBox',
             },
-            h(
+            createJsxElement(
               'label',
               null,
-              h('input', {
+              createJsxElement('input', {
                 type: 'checkbox',
                 name: 'checkbox',
                 value: 'checkbox2',
@@ -161,15 +165,15 @@ function sectionPage1() {
               'checkbox option2'
             )
           ),
-          h(
+          createJsxElement(
             'div',
             {
               className: 'fieldBox',
             },
-            h(
+            createJsxElement(
               'label',
               null,
-              h('input', {
+              createJsxElement('input', {
                 type: 'checkbox',
                 name: 'checkbox',
                 value: 'checkbox3',
@@ -179,14 +183,18 @@ function sectionPage1() {
             )
           )
         ),
-        h('small', null, '\u203B \uD544\uC218 \uD56D\uBAA9\uC785\uB2C8\uB2E4.')
+        createJsxElement(
+          'small',
+          null,
+          '\u203B \uD544\uC218 \uD56D\uBAA9\uC785\uB2C8\uB2E4.'
+        )
       ),
-      h(
+      createJsxElement(
         'div',
         {
           className: 'buttons',
         },
-        h(
+        createJsxElement(
           'button',
           {
             type: 'button',
@@ -196,7 +204,7 @@ function sectionPage1() {
           },
           '\uB2E4\uC74C'
         ),
-        h(
+        createJsxElement(
           'button',
           {
             type: 'button',

@@ -1,6 +1,6 @@
 'use strict';
 
-function h(type, props) {
+function createJsxElement(type, props) {
   var element = document.createElement(type);
   Object.keys(props || {}).forEach(function (key) {
     if (key.startsWith('on') && typeof props[key] === 'function') {
