@@ -3,6 +3,7 @@
   "parserOptions": {
     "ecmaVersion": 13
   },
+  "parser": "babel-eslint",
   "extends": ["airbnb-base", "plugin:prettier/recommended", "prettier"],
   "env": {
     "browser": true,
