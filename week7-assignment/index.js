@@ -78,7 +78,18 @@ const pages = {
     previousBtn.addEventListener('click', previousStep);
     pageInput.addEventListener('change', storeInputValue);
   },
-  page3: () => (container.innerHTML = page3()),
+  page3: () => {
+    container.innerHTML = page3();
+    const newFormBtn = document.getElementById('newFormBtn');
+    newFormBtn.addEventListener('click', () => {
+      formData.select = '';
+      formData.textarea = '';
+      formData.radio = '';
+      formData.checkbox = [];
+      sessionStorage.setItem('data', JSON.stringify(formData));
+      router.navigate('');
+    });
+  },
 };
 
 router
