@@ -40,6 +40,7 @@ const storeInputValue = (e) => {
   } else {
     formData.select = e.target.value;
   }
+  sessionStorage.setItem('data', JSON.stringify(formData));
 };
 
 const container = document.querySelector('main');
@@ -47,8 +48,16 @@ const pages = {
   page1: () => {
     container.innerHTML = page1();
     const validationBtn = document.getElementById('validationBtn');
+    const resetBtn = document.getElementById('resetBtn');
     validationBtn.addEventListener('click', nextStep);
     const pageInput = document.querySelector('form[name="form"]');
+    resetBtn.addEventListener('click', () => {
+      pageInput.reset();
+      formData.radio = '';
+      formData.checkbox = [];
+      sessionStorage.setItem('data', JSON.stringify(formData));
+    });
+
     pageInput.addEventListener('change', storeInputValue);
   },
   page2: () => {
@@ -56,6 +65,13 @@ const pages = {
     const pageInput = document.querySelector('form[name="form"]');
     const previousBtn = document.querySelector('.prev');
     const validationBtn = document.getElementById('validationBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    resetBtn.addEventListener('click', () => {
+      pageInput.reset();
+      formData.select = '';
+      formData.textarea = '';
+      sessionStorage.setItem('data', JSON.stringify(formData));
+    });
     validationBtn.addEventListener('click', nextStep);
     previousBtn.addEventListener('click', previousStep);
     pageInput.addEventListener('change', storeInputValue);
