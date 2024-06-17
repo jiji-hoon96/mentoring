@@ -6,94 +6,92 @@ import { FORM_DATA } from './common.js';
 
 const router = createRouter();
 const formData = FORM_DATA;
+const container = document.querySelector('main');
+
+const navigateTo = (hash) => {
+  router.navigate(hash);
+};
+
+const isValidStep1 = () => formData.radio && formData.checkbox.length > 0;
+const isValidStep2 = () => formData.select && formData.textarea;
 
 const nextStep = () => {
-  if (window.location.hash === '') {
-    formData.radio && formData.checkbox.length > 0
-      ? router.navigate('#/2')
-      : alert('필수 항목을 입력해주세요.');
-  } else if (window.location.hash === '#/2') {
-    formData.select && formData.textarea
-      ? router.navigate('#/3')
-      : alert('필수 항목을 입력해주세요.');
-  }
+  if (window.location.hash === '' && isValidStep1()) return navigateTo('#/2');
+  if (window.location.hash === '#/2' && isValidStep2())
+    return navigateTo('#/3');
+  alert('필수 항목을 입력해주세요.');
 };
 
-const previousStep = () => {
-  router.navigate('');
+const toggleCheckboxValue = (value) => {
+  const checkboxValues = formData.checkbox || [];
+  const valueIndex = checkboxValues.indexOf(value);
+  if (valueIndex > -1) checkboxValues.splice(valueIndex, 1);
+  else checkboxValues.push(value);
 };
+
+const previousStep = () => navigateTo('');
 
 const storeInputValue = (e) => {
-  if (e.target.name === 'radio') {
-    formData.radio = e.target.value;
-  } else if (e.target.name === 'checkbox') {
-    let checkboxValues = formData.checkbox ? formData.checkbox : [];
-    const valueIndex = checkboxValues.indexOf(e.target.value);
-
-    if (valueIndex > -1) {
-      checkboxValues.splice(valueIndex, 1);
-    } else {
-      checkboxValues.push(e.target.value);
-    }
-  } else if (e.target.name === 'textarea') {
-    formData.textarea = e.target.value;
-  } else {
-    formData.select = e.target.value;
-  }
+  const { name, value } = e.target;
+  if (name === 'radio') formData.radio = value;
+  if (name === 'checkbox') toggleCheckboxValue(value);
+  if (name === 'textarea') formData.textarea = value;
+  if (name === 'select') formData.select = value;
   sessionStorage.setItem('data', JSON.stringify(formData));
 };
 
-const container = document.querySelector('main');
-const pages = {
-  page1: () => {
-    container.innerHTML = page1();
-    const validationBtn = document.getElementById('validationBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    validationBtn.addEventListener('click', nextStep);
-    const pageInput = document.querySelector('form[name="form"]');
-    resetBtn.addEventListener('click', () => {
-      pageInput.reset();
-      formData.radio = '';
-      formData.checkbox = [];
-      sessionStorage.setItem('data', JSON.stringify(formData));
-      pages.page1();
-    });
-
-    pageInput.addEventListener('change', storeInputValue);
-  },
-  page2: () => {
-    container.innerHTML = page2();
-    const pageInput = document.querySelector('form[name="form"]');
-    const previousBtn = document.querySelector('.prev');
-    const validationBtn = document.getElementById('validationBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    resetBtn.addEventListener('click', () => {
-      pageInput.reset();
-      formData.select = '';
-      formData.textarea = '';
-      sessionStorage.setItem('data', JSON.stringify(formData));
-      pages.page2();
-    });
-    validationBtn.addEventListener('click', nextStep);
-    previousBtn.addEventListener('click', previousStep);
-    pageInput.addEventListener('change', storeInputValue);
-  },
-  page3: () => {
-    container.innerHTML = page3();
-    const newFormBtn = document.getElementById('newFormBtn');
-    newFormBtn.addEventListener('click', () => {
-      formData.select = '';
-      formData.textarea = '';
-      formData.radio = '';
-      formData.checkbox = [];
-      sessionStorage.setItem('data', JSON.stringify(formData));
-      router.navigate('');
-    });
-  },
+const resetForm = (page) => {
+  formData.radio = '';
+  formData.checkbox = [];
+  formData.select = '';
+  formData.textarea = '';
+  sessionStorage.setItem('data', JSON.stringify(formData));
+  pages[page]();
 };
 
-router
-  .addRouter('', pages.page1)
-  .addRouter('#/2', pages.page2)
-  .addRouter('#/3', pages.page3)
-  .start();
+const setupPage1 = () => {
+  container.innerHTML = page1();
+  document.getElementById('validationBtn').addEventListener('click', nextStep);
+  document
+    .getElementById('resetBtn')
+    .addEventListener('click', () => resetForm('page1'));
+  document
+    .querySelector('form[name="form"]')
+    .addEventListener('change', storeInputValue);
+};
+
+const setupPage2 = () => {
+  container.innerHTML = page2();
+  document.getElementById('validationBtn').addEventListener('click', nextStep);
+  document.querySelector('.prev').addEventListener('click', previousStep);
+  document
+    .getElementById('resetBtn')
+    .addEventListener('click', () => resetForm('page2'));
+  document
+    .querySelector('form[name="form"]')
+    .addEventListener('change', storeInputValue);
+};
+
+const setupPage3 = () => {
+  container.innerHTML = page3();
+  document.getElementById('newFormBtn').addEventListener('click', () => {
+    resetForm('page1');
+    navigateTo('');
+  });
+};
+
+const pages = {
+  page1: setupPage1,
+  page2: setupPage2,
+  page3: setupPage3,
+};
+
+const initRouter = () => {
+  router
+    .addRouter('', pages.page1)
+    .addRouter('#/2', pages.page2)
+    .addRouter('#/3', pages.page3)
+    .start();
+};
+
+document.addEventListener('DOMContentLoaded', initRouter);
