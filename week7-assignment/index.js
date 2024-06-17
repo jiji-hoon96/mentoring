@@ -56,6 +56,7 @@ const pages = {
       formData.radio = '';
       formData.checkbox = [];
       sessionStorage.setItem('data', JSON.stringify(formData));
+      pages.page1();
     });
 
     pageInput.addEventListener('change', storeInputValue);
@@ -71,6 +72,7 @@ const pages = {
       formData.select = '';
       formData.textarea = '';
       sessionStorage.setItem('data', JSON.stringify(formData));
+      pages.page2();
     });
     validationBtn.addEventListener('click', nextStep);
     previousBtn.addEventListener('click', previousStep);
