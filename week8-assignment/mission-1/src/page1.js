@@ -1,25 +1,7 @@
-'use strict';
-
-/** @jsx h */
-function h(type, props) {
-  for (
-    var _len = arguments.length,
-      children = new Array(_len > 2 ? _len - 2 : 0),
-      _key = 2;
-    _key < _len;
-    _key++
-  ) {
-    children[_key - 2] = arguments[_key];
-  }
-
-  return {
-    type: type,
-    props: props,
-    children: children,
-  };
+function h(type, props, ...children) {
+  return { type, props, children };
 }
-
-var vm = h(
+const vm = h(
   'div',
   null,
   h(
@@ -219,6 +201,8 @@ var vm = h(
     )
   )
 );
+const $root = document.body.querySelector('#root');
 
-var $root = document.body.querySelector('#root');
-$root.innerHTML = '\n  <pre>'.concat(JSON.stringify(vm, null, 2), '</pre>\n');
+$root.innerHTML = `
+<pre>${JSON.stringify(vm, null, 2)}</pre>
+`;
