@@ -22,6 +22,13 @@ function createElement(node) {
   if (typeof node === 'string') {
     return document.createTextNode(node);
   }
+  if (Array.isArray(node)) {
+    var fragment = document.createDocumentFragment();
+    node.forEach(function (childNode) {
+      fragment.appendChild(createElement(childNode));
+    });
+    return fragment;
+  }
   var type = node.type,
     props = node.props,
     children = node.children;
@@ -42,40 +49,46 @@ function createElement(node) {
   });
   return element;
 }
-var FORM_DATA = {
-  radio: 'radio1',
-  checkbox: ['checkbox1'],
-};
-var options = {
-  radio: [
-    {
-      value: 'radio1',
-      label: 'radio option1',
-    },
-    {
-      value: 'radio2',
-      label: 'radio option2',
-    },
-    {
-      value: 'radio3',
-      label: 'radio option3',
-    },
-  ],
-  checkbox: [
-    {
-      value: 'checkbox1',
-      label: 'checkbox option1',
-    },
-    {
-      value: 'checkbox2',
-      label: 'checkbox option2',
-    },
-    {
-      value: 'checkbox3',
-      label: 'checkbox option3',
-    },
-  ],
-};
+var radioOption = [
+  {
+    id: '1',
+    label: 'radio option1',
+    value: 'radio1',
+    checked: true,
+  },
+  {
+    id: '2',
+    label: 'radio option2',
+    value: 'radio2',
+    checked: false,
+  },
+  {
+    id: '3',
+    label: 'radio option3',
+    value: 'radio3',
+    checked: false,
+  },
+];
+var checkboxOption = [
+  {
+    id: '1',
+    label: 'checkbox option1',
+    value: 'checkbox1',
+    checked: true,
+  },
+  {
+    id: '2',
+    label: 'checkbox option2',
+    value: 'checkbox2',
+    checked: false,
+  },
+  {
+    id: '3',
+    label: 'checkbox option3',
+    value: 'checkbox3',
+    checked: false,
+  },
+];
 var vm = createElement(
   h(
     'div',
@@ -122,26 +135,30 @@ var vm = createElement(
               '*'
             )
           ),
-          options.radio.map(function (option) {
-            return h(
-              'div',
-              {
-                className: 'fieldBox',
-                key: option.value,
-              },
-              h(
-                'label',
-                null,
-                h('input', {
-                  type: 'radio',
-                  name: 'radio',
-                  value: option.value,
-                  checked: FORM_DATA.radio === option.value,
-                }),
-                option.label
-              )
-            );
-          })
+          h(
+            'div',
+            null,
+            radioOption.map(function (option) {
+              return h(
+                'div',
+                {
+                  className: 'fieldBox',
+                  key: option.value,
+                },
+                h(
+                  'label',
+                  null,
+                  h('input', {
+                    type: 'radio',
+                    name: 'radio',
+                    value: option.value,
+                    checked: option.checked,
+                  }),
+                  option.label
+                )
+              );
+            })
+          )
         ),
         h('small', null, '\u203B \uD544\uC218 \uD56D\uBAA9\uC785\uB2C8\uB2E4.')
       ),
@@ -165,7 +182,7 @@ var vm = createElement(
               '*'
             )
           ),
-          options.checkbox.map(function (option) {
+          checkboxOption.map(function (option) {
             return h(
               'div',
               {
@@ -179,7 +196,7 @@ var vm = createElement(
                   type: 'checkbox',
                   name: 'checkbox',
                   value: option.value,
-                  checked: FORM_DATA.checkbox.includes(option.value),
+                  checked: option.checked,
                 }),
                 option.label
               )

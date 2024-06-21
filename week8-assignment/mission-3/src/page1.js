@@ -9,6 +9,14 @@ function createElement(node) {
     return document.createTextNode(node);
   }
 
+  if (Array.isArray(node)) {
+    const fragment = document.createDocumentFragment();
+    node.forEach((childNode) => {
+      fragment.appendChild(createElement(childNode));
+    });
+    return fragment;
+  }
+
   const { type, props, children } = node;
   const element = document.createElement(type);
 
@@ -31,23 +39,17 @@ function createElement(node) {
   return element;
 }
 
-const FORM_DATA = {
-  radio: 'radio1',
-  checkbox: ['checkbox1'],
-};
+const radioOption = [
+  { id: '1', label: 'radio option1', value: 'radio1', checked: true },
+  { id: '2', label: 'radio option2', value: 'radio2', checked: false },
+  { id: '3', label: 'radio option3', value: 'radio3', checked: false },
+];
 
-const options = {
-  radio: [
-    { value: 'radio1', label: 'radio option1' },
-    { value: 'radio2', label: 'radio option2' },
-    { value: 'radio3', label: 'radio option3' },
-  ],
-  checkbox: [
-    { value: 'checkbox1', label: 'checkbox option1' },
-    { value: 'checkbox2', label: 'checkbox option2' },
-    { value: 'checkbox3', label: 'checkbox option3' },
-  ],
-};
+const checkboxOption = [
+  { id: '1', label: 'checkbox option1', value: 'checkbox1', checked: true },
+  { id: '2', label: 'checkbox option2', value: 'checkbox2', checked: false },
+  { id: '3', label: 'checkbox option3', value: 'checkbox3', checked: false },
+];
 
 const vm = createElement(
   <div>
@@ -62,19 +64,21 @@ const vm = createElement(
           <legend>
             radio input<span className="require">*</span>
           </legend>
-          {options.radio.map((option) => (
-            <div className="fieldBox" key={option.value}>
-              <label>
-                <input
-                  type="radio"
-                  name="radio"
-                  value={option.value}
-                  checked={FORM_DATA.radio === option.value}
-                />
-                {option.label}
-              </label>
-            </div>
-          ))}
+          <div>
+            {radioOption.map((option) => (
+              <div className="fieldBox" key={option.value}>
+                <label>
+                  <input
+                    type="radio"
+                    name="radio"
+                    value={option.value}
+                    checked={option.checked}
+                  />
+                  {option.label}
+                </label>
+              </div>
+            ))}
+          </div>
         </fieldset>
         <small>※ 필수 항목입니다.</small>
       </div>
@@ -83,14 +87,14 @@ const vm = createElement(
           <legend>
             checkbox input<span className="require">*</span>
           </legend>
-          {options.checkbox.map((option) => (
+          {checkboxOption.map((option) => (
             <div className="fieldBox" key={option.value}>
               <label>
                 <input
                   type="checkbox"
                   name="checkbox"
                   value={option.value}
-                  checked={FORM_DATA.checkbox.includes(option.value)}
+                  checked={option.checked}
                 />
                 {option.label}
               </label>
