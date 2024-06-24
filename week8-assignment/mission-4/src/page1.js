@@ -40,14 +40,13 @@ function createElement(node) {
 }
 
 function updateElement(parent, newNode, oldNode, index = 0) {
-  if (!newNode && oldNode) return parent.removeChild(parent.childNode[index]);
+  if (!newNode && oldNode) return parent.removeChild(parent.childNodes[index]);
   if (newNode && !oldNode) return parent.appendChild(createElement(newNode));
   if (typeof newNode === 'string' && typeof oldNode === 'string') {
-    if (newNode === oldNode) return;
-    return parent.replaceChild(
-      createElement(newNode),
-      parent.childNodes[index]
-    );
+    if (newNode !== oldNode) {
+      parent.childNodes[index].nodeValue = newNode;
+    }
+    return;
   }
   if (newNode.type !== oldNode.type) {
     return parent.replaceChild(
@@ -62,15 +61,14 @@ function updateElement(parent, newNode, oldNode, index = 0) {
     oldNode.props || {}
   );
 
-  if (newNode.children === undefined || oldNode.children === undefined) return;
+  const newLength = newNode.children ? newNode.children.length : 0;
+  const oldLength = oldNode.children ? oldNode.children.length : 0;
 
-  const maxLength = Math.max(newNode.children.length, oldNode.children.length);
-
-  for (let i = 0; i < maxLength; i++) {
+  for (let i = 0; i < newLength || i < oldLength; i++) {
     updateElement(
       parent.childNodes[index],
-      newNode.children[i],
-      oldNode.children[i],
+      newNode.children && newNode.children[i],
+      oldNode.children && oldNode.children[i],
       i
     );
   }
@@ -79,12 +77,25 @@ function updateElement(parent, newNode, oldNode, index = 0) {
 function updateAttributes(target, newProps, oldProps) {
   for (const [attr, value] of Object.entries(newProps)) {
     if (oldProps[attr] === newProps[attr]) continue;
-    target.setAttribute(attr, value);
+    if (attr.startsWith('on') && typeof value === 'function') {
+      const eventName = attr.substring(2).toLowerCase();
+      target.removeEventListener(eventName, oldProps[attr]);
+      target.addEventListener(eventName, value);
+    } else if (attr === 'checked') {
+      target.checked = value;
+    } else {
+      target.setAttribute(attr, value);
+    }
   }
 
   for (const attr of Object.keys(oldProps)) {
     if (newProps[attr] !== undefined) continue;
-    target.removeAttribute(attr);
+    if (attr.startsWith('on') && typeof oldProps[attr] === 'function') {
+      const eventName = attr.substring(2).toLowerCase();
+      target.removeEventListener(eventName, oldProps[attr]);
+    } else {
+      target.removeAttribute(attr);
+    }
   }
 }
 
@@ -124,7 +135,7 @@ const vm = (radioList, checkboxList) => (
       <h1>Survey</h1>
       <strong className="require">* 표시는 필수 질문임</strong>
     </header>
-    <form name="form" id="form1" method="post">
+    <form name="form" id="form1">
       <div className="box">
         <fieldset>
           <legend>
@@ -170,12 +181,7 @@ const vm = (radioList, checkboxList) => (
         <small>※ 필수 항목입니다.</small>
       </div>
       <div className="buttons">
-        <button
-          type="button"
-          id="validationBtn"
-          className="next"
-          data-navigate="#/2"
-        >
+        <button type="submit" id="validationBtn" className="next">
           다음
         </button>
         <button type="button" id="resetBtn" className="reset">
@@ -189,9 +195,8 @@ const vm = (radioList, checkboxList) => (
 const oldNode = vm(oldRadioOption, oldCheckboxOption);
 const newNode = vm(newRadioOption, newCheckboxOption);
 
-const $root = document.body.querySelector('#root');
-
+const $root = document.createElement('div');
 document.body.appendChild($root);
 
 updateElement($root, oldNode);
-setTimeout(() => updateElement($root, newNode, oldNode), 1000);
+setTimeout(() => updateElement($root, newNode, oldNode), 1500);
