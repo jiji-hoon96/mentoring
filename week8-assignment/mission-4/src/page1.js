@@ -39,7 +39,54 @@ function createElement(node) {
   return element;
 }
 
-function updateElement(parent, newNode, oldNode) {}
+function updateElement(parent, newNode, oldNode, index = 0) {
+  if (!newNode && oldNode) return parent.removeChild(parent.childNode[index]);
+  if (newNode && !oldNode) return parent.appendChild(createElement(newNode));
+  if (typeof newNode === 'string' && typeof oldNode === 'string') {
+    if (newNode === oldNode) return;
+    return parent.replaceChild(
+      createElement(newNode),
+      parent.childNodes[index]
+    );
+  }
+  if (newNode.type !== oldNode.type) {
+    return parent.replaceChild(
+      createElement(newNode),
+      parent.childNodes[index]
+    );
+  }
+
+  updateAttributes(
+    parent.childNodes[index],
+    newNode.props || {},
+    oldNode.props || {}
+  );
+
+  if (newNode.children === undefined || oldNode.children === undefined) return;
+
+  const maxLength = Math.max(newNode.children.length, oldNode.children.length);
+
+  for (let i = 0; i < maxLength; i++) {
+    updateElement(
+      parent.childNodes[index],
+      newNode.children[i],
+      oldNode.children[i],
+      i
+    );
+  }
+}
+
+function updateAttributes(target, newProps, oldProps) {
+  for (const [attr, value] of Object.entries(newProps)) {
+    if (oldProps[attr] === newProps[attr]) continue;
+    target.setAttribute(attr, value);
+  }
+
+  for (const attr of Object.keys(oldProps)) {
+    if (newProps[attr] !== undefined) continue;
+    target.removeAttribute(attr);
+  }
+}
 
 const oldRadioOption = [
   { id: '1', label: 'radio option1', value: 'radio1', checked: true },
@@ -144,8 +191,7 @@ const newNode = vm(newRadioOption, newCheckboxOption);
 
 const $root = document.body.querySelector('#root');
 
+document.body.appendChild($root);
+
 updateElement($root, oldNode);
-
-setTimeout(() => updateElement($root, newNode, oldNode), [1000]);
-
-$root.appendChild(vm);
+setTimeout(() => updateElement($root, newNode, oldNode), 1000);
