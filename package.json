@@ -1,7 +1,7 @@
 {
   "scripts": {
     "jest": "jest",
-    "build": "npx babel week7-assignment --out-dir week7-assignment/dist"
+    "build": "npx babel week8-assignment/mission-5/src --out-dir week8-assignment/mission-5/dist"
   },
   "type": "module",
   "devDependencies": {
